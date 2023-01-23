@@ -24,20 +24,19 @@
 					inset
 				/>
 
-				<v-list-item>
+				<v-list-item class="user-list__item">
 					<v-list-item-avatar>
 						<v-img :src="item.avatar" @click="onAvatarClick(item)"/>
 					</v-list-item-avatar>
 
-					<v-list-item-content>
+					<v-list-item-content :key="keyUserInfoUpdate">
 						<v-list-item-title v-html="item.title" />
 
 						<v-list-item-subtitle v-html="item.subtitle" />
 
 						<span
-							:key="keyUserInfoUpdate"
+							v-if="item.showedAddress"
 							class="body-2"
-							:style="{opacity: +Boolean(item.showedAddress)}"
 						>
 							{{ item.address }}
 						</span>
@@ -84,3 +83,9 @@
 		},
   }
 </script>
+
+<style scoped>
+	.user-list__item {
+		min-height: 100px;
+	}
+</style>
