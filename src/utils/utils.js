@@ -1,3 +1,5 @@
+import {Modifiers} from '@/constant/const.js';
+
 /**
  * Функция для получения числа из строки
  * @param {object} obj - Объект, из которого будет браться поле;
@@ -5,6 +7,7 @@
  */
 
 export const getMatchNumber = (obj, field) => Number(obj[field].match(/\d/g).join(''));
+
 
 /**
  * Функция для добавления в мапу фильтра
@@ -24,3 +27,27 @@ export const setMapFilter = (state, map, modifier, filter, value) => {
 		value: value ?? state[filter],
 	});
 }
+
+
+/**
+ * Мапа для фильтрации, у нас может быть на каждый модификатор несколько фильтров
+ * Поэтому все фильтры по модификатору передаются как параметр функции и возвращается отфильтрованный массив
+ */
+
+export const filtersMap = {
+	[Modifiers.EQ]: function (filterList) {
+		return filterList.reduce((acc, currentFilter) => {
+			return acc.filter((user) => user[currentFilter.filter] === currentFilter.value);
+		}, this);
+	},
+	[Modifiers.GT]: function (filterList) {
+		return filterList.reduce((acc, currentFilter) => {
+			return acc.filter((user) => user[currentFilter.filter] > currentFilter.value);
+		}, this);
+	},
+	[Modifiers.LT]: function (filterList) {
+		return filterList.reduce((acc, currentFilter) => {
+			return acc.filter((user) => user[currentFilter.filter] < currentFilter.value);
+		}, this);
+	},
+};

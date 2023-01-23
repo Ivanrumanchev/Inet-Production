@@ -3,7 +3,14 @@
 		max-width="450"
 		class="mx-auto"
 	>
-		<v-list three-line>
+		<v-skeleton-loader
+			v-if="loading"
+			class="mx-auto pt-10"
+			min-height="556"
+			type="table-row-divider@10"
+		/>
+
+		<v-list v-else three-line>
 			<v-subheader
 				v-text="'List'"
 			/>
@@ -42,7 +49,7 @@
 </template>
 
 <script>
-	import {mapActions, mapGetters} from 'vuex';
+	import {mapActions, mapGetters, mapState} from 'vuex';
 
   export default {
     name: 'custom-user-list',
@@ -61,6 +68,9 @@
 			...mapGetters('users', {
 				users: 'getUsers'
 			}),
+			...mapState('users', {
+				loading: 'usersLoading',
+			})
 		},
 
 		methods: {

@@ -1,10 +1,11 @@
 import {users} from '@/data/users.json';
-import {Modifiers} from '@/constant/const.js';
+import {filtersMap} from '@/utils/utils';
 
 export default {
 	namespaced: true,
   state: {
     users: [],
+		usersLoading: true,
   },
   mutations: {
     setUsers(state, users) {
@@ -15,30 +16,18 @@ export default {
     },
   },
   actions: {
-    fetchUsers({ commit }) {
-			commit('setUsers', users);
+    async fetchUsers({ commit }) {
+			// иммитация асинхронного запроса
+			commit('setUsersLoading', true);
+
+			await setTimeout(() => {
+				commit('setUsers', users);
+				commit('setUsersLoading', false);
+			}, 1000);
     },
   },
   getters: {
 		getUsers(state, getters, rootState, rootGetters) {
-			const filtersMap = {
-				[Modifiers.EQ]: function (filterList) {
-					return filterList.reduce((acc, currentFilter) => {
-						return acc.filter((user) => user[currentFilter.filter] === currentFilter.value);
-					}, this);
-				},
-				[Modifiers.GT]: function (filterList) {
-					return filterList.reduce((acc, currentFilter) => {
-						return acc.filter((user) => user[currentFilter.filter] > currentFilter.value);
-					}, this);
-				},
-				[Modifiers.LT]: function (filterList) {
-					return filterList.reduce((acc, currentFilter) => {
-						return acc.filter((user) => user[currentFilter.filter] < currentFilter.value);
-					}, this);
-				},
-			};
-
 			const selectedFilters = rootGetters['filters/getSelectedFilters'];
 
 			return Object.keys(selectedFilters).reduce((acc, filter) => {
