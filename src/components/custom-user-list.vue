@@ -7,7 +7,7 @@
 			v-if="loading"
 			class="mx-auto pt-10"
 			min-height="556"
-			type="table-row-divider@10"
+			type="list-item-avatar-three-line@5"
 		/>
 
 		<v-list v-else three-line>
@@ -15,34 +15,41 @@
 				v-text="'List'"
 			/>
 
-			<div
-				v-for="(item, index) in users"
-				:key="item.title"
-			>
-				<v-divider
-					v-if="index !== 0"
-					inset
-				/>
+			<v-fade-transition group>
+				<p v-if="!users.length" class="ml-4" key="noData">
+					Пользователей не найдено
+				</p>
 
-				<v-list-item class="user-list__item">
-					<v-list-item-avatar>
-						<v-img :src="item.avatar" @click="onAvatarClick(item)"/>
-					</v-list-item-avatar>
+				<div
+					v-else
+					v-for="(item, index) in users"
+					:key="item.title"
+				>
+					<v-divider
+						v-if="index !== 0"
+						inset
+					/>
 
-					<v-list-item-content :key="keyUserInfoUpdate">
-						<v-list-item-title v-html="item.title" />
+					<v-list-item class="user-list__item">
+						<v-list-item-avatar>
+							<v-img :src="item.avatar" @click="onAvatarClick(item)"/>
+						</v-list-item-avatar>
 
-						<v-list-item-subtitle v-html="item.subtitle" />
+						<v-list-item-content :key="keyUserInfoUpdate">
+							<v-list-item-title v-html="item.title" />
 
-						<span
-							v-if="item.showedAddress"
-							class="body-2"
-						>
-							{{ item.address }}
-						</span>
-					</v-list-item-content>
-				</v-list-item>
-			</div>
+							<v-list-item-subtitle v-html="item.subtitle" />
+
+							<span
+								v-if="item.showedAddress"
+								class="body-2"
+							>
+								{{ item.address }}
+							</span>
+						</v-list-item-content>
+					</v-list-item>
+				</div>
+			</v-fade-transition>
 		</v-list>
 	</v-card>
 </template>
@@ -88,4 +95,16 @@
 	.user-list__item {
 		min-height: 100px;
 	}
+
+	.list-enter-active,
+	.list-leave-active {
+		transition: all 0.5s ease;
+	}
+
+	.list-enter-from,
+	.list-leave-to {
+		opacity: 0;
+		transform: translateX(30px);
+	}
+
 </style>
